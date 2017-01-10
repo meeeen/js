@@ -1,0 +1,40 @@
+$('.click').click(function(){
+            var keys = [];
+            var p = {};
+            $('*').each(function(){
+                if(!$(this).hasClass('')) {
+                    keys.push($(this).attr('class'));
+                }
+            });
+            var o = document.styleSheets;
+            var i = 0;
+            while(i < o.length) {
+                var s = o[i].rules;
+                var j = 0;
+                while(j < s.length) {
+
+                    var t = s[j];
+                    var selector = t.selectorText;
+                    if(typeof(t.selectorText) == 'undefined') {
+                        p[common.md5(j)] = t.cssText;
+                        j++;
+                        continue;
+                    }
+                    for(var k in keys) {
+                        if(selector.indexOf(keys[k]) > 0) {
+                            if(typeof(p[keys[k]]) == 'undefined') {
+                                p[keys[k]] = '';
+                            }
+                            p[keys[k]] += t.cssText;
+                        }
+                        k++;
+                    }
+                    j++;
+                }
+                i++;
+            }
+            var urlPath = window.location.pathname;
+            urlPath = urlPath.substr(1).replace(/\//g, '_') + '.css';
+            console.log(urlPath);
+            console.log(p);
+        });
